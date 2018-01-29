@@ -8,9 +8,9 @@ def form():
 
 @app.route("/", methods=["POST"])
 def generate():
-	cores = {"WC": False, "WCr": False, "WCd": False, "NS": False, 
+	cores = {"WC": False, "WCr": False, "WCd": False, "NS": False, "NS 2" : False, 
 	"SCL": False, "HST": False, "QQ": False, "QR": False, "ITR": False,
-	"CC": False, "Ahp": False, "Ahq": False, "Aho": False, "Ahr": False}
+	"CC": False, "CC 2": False, "Ahp": False, "Ahq": False, "Aho": False, "Ahr": False}
 	if request.form.get("WC"):
 		cores["WC"] = True
 	if request.form.get("WCr"):
@@ -19,12 +19,16 @@ def generate():
 		cores["WCd"] = True
 	if request.form.get("NS"):
 		cores["NS"] = True
+	if request.form.get("NS 2"):
+		cores["NS"] = True
 	if request.form.get("HST"):
 		cores["HST"] = True
 	if request.form.get("SCL"):
 		cores["SCL"] = True
 	if request.form.get("CC"):
 		cores["CC"] = True
+	if request.form.get("CC 2"):
+		cores["CC 2"] = True
 	if request.form.get("QQ"):
 		cores["QQ"] = True
 	if request.form.get("QR"):
@@ -41,6 +45,10 @@ def generate():
 		cores["Ahq"] = True
 
 	return str(cores["WC"])
+
+def process(coreslist):
+
+
 
 if __name__ == "__main__":
     app.run()
