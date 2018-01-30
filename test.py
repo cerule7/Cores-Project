@@ -1,56 +1,27 @@
 from flask import Flask
 from flask import render_template, request
+
 app = Flask(__name__)
+
+core_codes = {"WC", "WCr", "WCd", "NS",
+			  "NS 2", "SCL", "HST", "QQ",
+			  "QR", "ITR", "CC", "CC 2",
+			  "Ahp", "Ahq", "Aho", "Ahr"}
+
 
 @app.route("/")
 def form():
-    return render_template('form.html')
+	return render_template('form.html')
+
 
 @app.route("/", methods=["POST"])
 def generate():
-	cores = {"WC": False, "WCr": False, "WCd": False, "NS": False, "NS 2" : False, 
-	"SCL": False, "HST": False, "QQ": False, "QR": False, "ITR": False,
-	"CC": False, "CC 2": False, "Ahp": False, "Ahq": False, "Aho": False, "Ahr": False}
-	if request.form.get("WC"):
-		cores["WC"] = True
-	if request.form.get("WCr"):
-		cores["WCr"] = True
-	if request.form.get("WCd"):
-		cores["WCd"] = True
-	if request.form.get("NS"):
-		cores["NS"] = True
-	if request.form.get("NS 2"):
-		cores["NS"] = True
-	if request.form.get("HST"):
-		cores["HST"] = True
-	if request.form.get("SCL"):
-		cores["SCL"] = True
-	if request.form.get("CC"):
-		cores["CC"] = True
-	if request.form.get("CC 2"):
-		cores["CC 2"] = True
-	if request.form.get("QQ"):
-		cores["QQ"] = True
-	if request.form.get("QR"):
-		cores["QR"] = True
-	if request.form.get("ITR"):
-		cores["ITR"] = True
-	if request.form.get("Ahp"):
-		cores["Ahp"] = True
-	if request.form.get("Aho"):
-		cores["Aho"] = True
-	if request.form.get("Ahr"):
-		cores["Ahr"] = True
-	if request.form.get("Ahq"):
-		cores["Ahq"] = True
-
+	cores = {core_code: bool(request.form.get(core_code)) for core_code in core_codes}
 	return str(cores["WC"])
 
 def process(coreslist):
-
+	pass
 
 
 if __name__ == "__main__":
-    app.run()
-
-
+	app.run()
