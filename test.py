@@ -10,10 +10,12 @@ core_codes = {"WC", "WCr", "WCd", "NS",
 
 
 @app.route("/")
+##renders website 
 def form():
 	return render_template('form.html')
 
-
+#posts checkbox results to server
+##creates dictionary of user's completed cores 
 @app.route("/", methods=["POST"])
 def generate():
 	cores = {core_code: bool(request.form.get(core_code)) for core_code in core_codes}
@@ -21,7 +23,6 @@ def generate():
 
 def process(coreslist):
 	pass
-
 
 if __name__ == "__main__":
 	app.run()
