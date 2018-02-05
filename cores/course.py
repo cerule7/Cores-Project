@@ -1,4 +1,4 @@
-class CoreClass:
+class Course:
 	name = ""
 	number = ""
 	cores = {"WC": False, "WCr": False, "WCd": False, 

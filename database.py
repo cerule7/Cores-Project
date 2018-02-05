@@ -1,6 +1,6 @@
 import sqlite3
 from flask import g, Flask, current_app
-from core_class import *
+from cores.course import Course
 
 app = Flask(__name__)
 
@@ -55,7 +55,7 @@ with app.app_context():
 		##(most cores to least cores) 
 		for courses in query_db('select * from courses where ' + core + ' = "1" ORDER BY total'):
 			dict = create_cores_dict(courses[1])
-			i = CoreClass(courses[1], courses[0], dict);
+			i = Course(courses[1], courses[0], dict);
 			cores_list.insert(0, i)
 		return cores_list
 
