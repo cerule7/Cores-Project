@@ -1,6 +1,6 @@
 import sqlite3
 from flask import g, Flask, current_app
-from CoreClass import *
+from core_class import *
 
 app = Flask(__name__)
 
