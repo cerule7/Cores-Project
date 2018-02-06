@@ -1,3 +1,6 @@
+# Code in this file is run when the cores_web package is imported, so this is the place to do initialization,
+# configuration, etc.
+
 from flask import Flask
 
 

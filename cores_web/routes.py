@@ -1,3 +1,5 @@
+# All URL routes (logic that decides what shows up at what URL) are handled in this file.
+
 from flask import render_template, request
 
 from cores.core import Core
