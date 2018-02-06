@@ -15,7 +15,11 @@ class Core(Enum):
     qr = 'QR'
     itr = 'ITR'
     cc = 'CC'
-    ahp = 'Ahp'
-    ahq = 'Ahq'
-    aho = 'Aho'
-    ahr = 'Ahr'
+    ahp = 'AHp'
+    ahq = 'AHq'
+    aho = 'AHo'
+    ahr = 'AHr'
+
+    @property
+    def code(self):
+        return self.value
