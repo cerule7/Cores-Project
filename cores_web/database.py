@@ -3,23 +3,28 @@
 import re
 import sqlite3
 
+from flask import g
+
 from cores.core import Core
 from cores.course import Course
 from cores_web import app
 
 
-with app.app_context():
-    _course_database = sqlite3.connect(app.config['COURSE_DATABASE_FILE'])
+def _get_course_database():
+    if not hasattr(g, '_course_database'):
+        g._course_database = sqlite3.connect(app.config['COURSE_DATABASE_FILE'])
+    return g._course_database
 
 
-# Close the course database when the app shuts down.
+# Close the course database when the application context is destroyed.
 @app.teardown_appcontext
-def close_course_database(exception):
-    _course_database.close()
+def _close_course_database(exception):
+    if hasattr(g, '_course_database'):
+        g._course_database.close()
 
 
 def _query_db(query):
-    cursor = _course_database.execute(query)
+    cursor = _get_course_database().execute(query)
     rows = cursor.fetchall()
     cursor.close()
     return rows
@@ -38,8 +43,8 @@ def _parse_course_codes(string):
 
 
 def courses_with_core(core):
-    # There's no risk of SQL injection because we're not using user-submitted course strings; this function only
-    # accepts objects of our own Core class.
+    # There's no risk of SQL injection because we're not using user-submitted strings; this function only accepts
+    # objects of our own Core class.
     for row in _query_db(f'select * from courses where {core.code} = "1" ORDER BY total'):
         name = row[1]
         number = row[0]
