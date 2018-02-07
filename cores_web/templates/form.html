@@ -1,0 +1,26 @@
+<form class="form-horizontal" action= "/" method="POST">
+<fieldset>
+  
+<!-- Form Name -->
+<legend>Cores Completed</legend>
+
+<!-- Multiple Checkboxes -->
+<div class="form-group">
+    {% for core in cores %}
+    <div>
+        <input id="{{ core.code }}" type="checkbox" name="{{ core.code }}"/>
+        <label for="{{ core.code }}">{{ core.code }}</label>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="generatebutton"></label>
+  <div class="col-md-4">
+    <button id="generatebutton" name="generatebutton" class="btn btn-primary"> Generate</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
