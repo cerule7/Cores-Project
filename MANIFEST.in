@@ -1,2 +1,2 @@
-graft templates
-include courses.db
+graft cores_web/data
+graft cores_web/templates
