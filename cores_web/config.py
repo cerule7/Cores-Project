@@ -3,8 +3,6 @@
 import os
 import pathlib
 
-TEMPLATES_AUTO_RELOAD=True
-
 # The directory that the currently running code lives in (cores_web).
 SOURCE_DIRECTORY = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 

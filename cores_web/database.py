@@ -43,8 +43,6 @@ def _parse_course_codes(string):
 
 
 def courses_with_core(core):
-    # There's no risk of SQL injection because we're not using user-submitted strings; this function only accepts
-    # objects of our own Core class.
     for row in _query_db(f'select * from courses where {core.code} = "1" ORDER BY total'):
         name = row[1]
         number = row[0]
