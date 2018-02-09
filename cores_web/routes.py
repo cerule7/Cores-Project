@@ -5,7 +5,6 @@ from flask import render_template, request
 from cores.core import Core
 from cores_web import app, database
 
-
 @app.route('/', methods=['GET', 'POST'])
 def test_core_selection():
     if request.method == 'GET':
