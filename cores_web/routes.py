@@ -19,15 +19,15 @@ def test_core_selection():
 
 @app.route('/database', methods=['GET', 'POST'])
 
-def database():
+def the_database():
     #creates a set of cores from those selected 
     selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
     coreset = yield_cores(selected_cores)
     missing_core = pick_core(coreset)
-    generate_descriptions(missing_core)
+    return generate_descriptions(missing_core)
 
 def yield_cores(selected_cores):
-    #BUilds set of user's filled cores
+    #Builds set of user's filled cores
     coreset = set()
     for c in selected_cores:
         coreset.add(c)
@@ -89,7 +89,6 @@ def check_ah(coreset):
 
 def generate_descriptions(missing_core):
     #Has an AttributeError right now because of database.courses_with_core
-    missing_core = pick_core(coreset)
     wcr_courses = database.courses_with_core(missing_core)
     descriptions = (
         f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'

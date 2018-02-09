@@ -43,8 +43,12 @@ def _parse_course_codes(string):
 
 
 def courses_with_core(core):
-    for row in _query_db(f'select * from courses where {core.code} = "1" ORDER BY total'):
-        name = row[1]
-        number = row[0]
-        cores = set(map(Core, _parse_course_codes(row[3])))
-        yield Course(name, number, cores)
+	code = core.code
+	code = code[3:]
+	#code = 'SCL'
+	#This works for hardcoded values of code but is a syntax error otherwise? 
+	for row in _query_db(f'select * from courses where {code} = "1" ORDER BY total'):
+		name = row[1]
+		number = row[0]
+		cores = set(map(Core, _parse_course_codes(row[3])))
+		yield Course(name, number, cores)
