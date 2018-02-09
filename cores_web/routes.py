@@ -88,7 +88,6 @@ def check_ah(coreset):
     return (sum >= 2)
 
 def generate_descriptions(missing_core):
-    #Has an AttributeError right now because of database.courses_with_core
     wcr_courses = database.courses_with_core(missing_core)
     descriptions = (
         f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'
