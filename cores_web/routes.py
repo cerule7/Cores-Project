@@ -24,7 +24,7 @@ def the_database():
     selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
     coreset = yield_cores(selected_cores)
     missing_core = pick_core(coreset)
-    return generate_descriptions(missing_core)
+    return generate_descriptions(missing_core)[:3]
 
 def yield_cores(selected_cores):
     #Builds set of user's filled cores
@@ -44,35 +44,35 @@ def pick_core(coreset):
     #Evaluates which missing core is rarest and returns classes with higest total cores
     #Expos must be filled first
     if(not(search_core('WC', coreset))):
-        return generate_descriptions(Core.wc)
+        return generate_descriptions("wc")
     if(not(search_core('QR', coreset))):
-        return generate_descriptions(Core.qr)
+        return generate_descriptions("qr")
     if(not(search_core('QQ', coreset))):
-        return generate_descriptions(Core.qq)
+        return generate_descriptions("qq")
     if(not(search_core('ITR', coreset))):
-        return generate_descriptions(Core.itr)
+        return generate_descriptions("itr")
     if(not(search_core('NS', coreset))):
-        return generate_descriptions(Core.ns)
+        return generate_descriptions("ns")
     if(not(search_core('NS2', coreset))):
-        return generate_descriptions(Core.ns)
+        return generate_descriptions("ns")
     if(not(search_core('SCL', coreset))):
-        return generate_descriptions(Core.scl)
+        return generate_descriptions("scl")
     if(not(search_core('WCd', coreset))):
-        return generate_descriptions(Core.wcd)
+        return generate_descriptions("wcd")
     if(not(search_core('WCr', coreset))):
-        return generate_descriptions(Core.wcr)
+        return generate_descriptions("wcr")
     if(not(search_core('HST', coreset))):
-        return generate_descriptions(Core.hst)
+        return generate_descriptions("hst")
     if(not(search_core('CC', coreset))):
-        return generate_descriptions(Core.cc)
+        return generate_descriptions("cc")
     if(not(search_core('CC2', coreset))):
-        return generate_descriptions(Core.cc)
+        return generate_descriptions("cc")
     #only 2 Ahs are needed and these two are the most prevalent 
     if(not(check_ah(core))):
         if(not(search_core('AHp', coreset))):
-            return generate_description(Core.ahp)
+            return generate_description("ahp")
         if(not(search_core('AHo', coreset))):
-            return generate_description(Core.aho)
+            return generate_description("aho")
 
 def check_ah(coreset):
     #total Ahs filled
@@ -87,11 +87,13 @@ def check_ah(coreset):
         sum += 1
     return (sum >= 2)
 
+import sys
+
 def generate_descriptions(missing_core):
-    wcr_courses = database.courses_with_core(missing_core)
+    core_courses = database.courses_with_core(missing_core)
     descriptions = (
         f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'
-        for course in wcr_courses
+        for course in core_courses
     )
     return '<br>'.join(descriptions)
 
