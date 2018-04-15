@@ -1,7 +1,6 @@
 # All URL routes (logic that decides what shows up at what URL) are handled in this file.
 
 from flask import render_template, request
-
 from cores.core import Core
 from cores_web import app, database
 
@@ -11,34 +10,31 @@ def test_core_selection():
         # Display the available cores.
         return render_template('form.html', cores=sorted(Core, key=lambda core: core.code))
     elif request.method == 'POST':
-        # Display the cores that the user has selected.
-        #selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
         return redirect(url_for("database"))
-        #return '<br>'.join(core.code for core in selected_cores)
 
 
 @app.route('/database', methods=['GET', 'POST'])
 
 def the_database():
-    #creates a set of cores from those selected 
-    selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
-    coreset = yield_cores(selected_cores)
-    missing_core = pick_core(coreset)
-    return generate_descriptions(missing_core)[:3]
+	#creates a set of cores from those selected 
+	selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
+	coreset = yield_cores(selected_cores)
+	missing_core = pick_core(coreset)
+	return missing_core
 
 def yield_cores(selected_cores):
-    #Builds set of user's filled cores
-    coreset = set()
-    for c in selected_cores:
-        coreset.add(c)
-    return coreset
+	#Builds set of user's filled cores
+	coreset = set()
+	for c in selected_cores:
+		coreset.add(c)
+	return coreset
 
 def search_core(str, coreset):
-    #Return if a core is filled
-    for c in coreset:
-        if(c.code == str):
-            return True
-    return False
+	#Return if a core is filled
+	for c in coreset:
+		if(c.code == str):
+			return True
+	return False
 
 def pick_core(coreset): 
     #Evaluates which missing core is rarest and returns classes with higest total cores
@@ -53,7 +49,7 @@ def pick_core(coreset):
         return generate_descriptions("itr")
     if(not(search_core('NS', coreset))):
         return generate_descriptions("ns")
-    if(not(search_core('NS2', coreset))):
+    if(not(search_core('NS 2', coreset))):
         return generate_descriptions("ns")
     if(not(search_core('SCL', coreset))):
         return generate_descriptions("scl")
@@ -68,11 +64,11 @@ def pick_core(coreset):
     if(not(search_core('CC2', coreset))):
         return generate_descriptions("cc")
     #only 2 Ahs are needed and these two are the most prevalent 
-    if(not(check_ah(core))):
+    if(not(check_ah(coreset))):
         if(not(search_core('AHp', coreset))):
-            return generate_description("ahp")
+            return generate_descriptions("ahp")
         if(not(search_core('AHo', coreset))):
-            return generate_description("aho")
+            return generate_descriptions("aho")
 
 def check_ah(coreset):
     #total Ahs filled
