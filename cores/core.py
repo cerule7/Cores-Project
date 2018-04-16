@@ -9,7 +9,7 @@ class Core(Enum):
     wcr = 'WCr'
     wcd = 'WCd'
     ns = 'NS'
-    ns2 = 'NS 2'
+    ns2 = 'NS2'
     scl = 'SCL'
     hst = 'HST'
     qq = 'QQ'

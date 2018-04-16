@@ -1,0 +1,26 @@
+<form class="form-horizontal" action= "/database" method="POST">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Course Choices</legend>
+
+<!-- Multiple Radioboxes -->
+<div class="form-group">
+    {% for course in suggested_courses %}
+    <div>
+        <input id="{{ course.number }}" type="radio" name="choice"/>
+        <label for="{{ course.number }}">{{ course.description }}</label>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="choosebutton"></label>
+  <div class="col-md-4">
+    <button id="choosebutton" name="choosebutton" class="btn btn-primary"> Choose </button>
+  </div>
+</div>
+
+</fieldset>
+</form>

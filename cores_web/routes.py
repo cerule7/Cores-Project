@@ -19,9 +19,22 @@ def the_database():
 	#creates a set of cores from those selected
 	selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
 	coreset = yield_cores(selected_cores)
-	missing_core = pick_core(coreset)
-	return missing_core
+	if(complete_set(coreset)):
+		return "Congrats, you've filled all of your requirements!"
+	suggested_courses = pick_core(coreset)
+	return render_template('suggested_courses_form.html', suggested_courses=suggested_courses)
 
+def complete_set(coreset):
+	size = len(coreset)
+	if(search_core('AHo', coreset)):
+		size -= 1
+	if(search_core('AHp', coreset)):
+		size -= 1
+	if(search_core('AHr', coreset)):
+		size -= 1
+	if(search_core('AHq', coreset)):
+		size -= 1
+	return (check_ah(coreset) and size == 12)
 
 def yield_cores(selected_cores):
 	#Builds set of user's filled cores
@@ -43,35 +56,35 @@ def pick_core(coreset):
     #Evaluates which missing core is rarest and returns classes with higest total cores
     #Expos must be filled first
     if(not(search_core('WC', coreset))):
-        return generate_descriptions("wc", coreset)
+        return query("wc", coreset)
     if(not(search_core('QR', coreset))):
-        return generate_descriptions("qr", coreset)
+        return query("qr", coreset)
     if(not(search_core('QQ', coreset))):
-        return generate_descriptions("qq", coreset)
+        return query("qq", coreset)
     if(not(search_core('WCd', coreset))):
-        return generate_descriptions("wcd", coreset)
+        return query("wcd", coreset)
     if(not(search_core('WCr', coreset))):
-        return generate_descriptions("wcr", coreset)
+        return query("wcr", coreset)
     if(not(search_core('ITR', coreset))):
-        return generate_descriptions("itr", coreset)
+        return query("itr", coreset)
     if(not(search_core('NS', coreset))):
-        return generate_descriptions("ns", coreset)
-    if(not(search_core('NS 2', coreset))):
-        return generate_descriptions("ns", coreset)
+        return query("ns", coreset)
+    if(not(search_core('NS2', coreset))):
+        return query("ns", coreset)
     if(not(search_core('SCL', coreset))):
-        return generate_descriptions("scl", coreset)
+        return query("scl", coreset)
     if(not(search_core('HST', coreset))):
-        return generate_descriptions("hst", coreset)
+        return query("hst", coreset)
     if(not(search_core('CC', coreset))):
-        return generate_descriptions("cc", coreset)
+        return query("cc", coreset)
     if(not(search_core('CC2', coreset))):
-        return generate_descriptions("cc", coreset)
+        return query("cc", coreset)
     #only 2 Ahs are needed and these two are the most prevalent
     if(not(check_ah(coreset))):
         if(not(search_core('AHp', coreset))):
-            return generate_descriptions("ahp", coreset)
+            return query("ahp", coreset)
         if(not(search_core('AHo', coreset))):
-            return generate_descriptions("aho", coreset)
+            return query("aho", coreset)
 
 
 def check_ah(coreset):
@@ -98,14 +111,21 @@ def cull_singles(core_courses, coreset):
 				numcores -= 1
 		if(len(course.cores) == 2 or numcores > 1 or len(coreset) > 14):
 			new_courses.append(course)
-	return new_courses[:5]
+	return new_courses[:6]
 
 
-def generate_descriptions(missing_core, coreset):
-    core_courses = database.courses_with_core(missing_core)
-    core_courses = cull_singles(core_courses, coreset)
-    descriptions = (
-        f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'
-        for course in core_courses
-    )
-    return '<br>'.join(descriptions)
+def query(missing_core, coreset):
+	core_courses = database.courses_with_core(missing_core)
+	if(missing_core != 'wc'):
+		core_courses = cull_singles(core_courses, coreset)
+	return core_courses
+
+def get_description(course):
+	return f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'
+
+#def generate_descriptions(core_courses):
+#	descriptions = (
+#		f'{course.number}: {course.name} ({", ".join(sorted(core.code for core in course.cores))})'
+#		for course in core_courses
+#	)
+#	return '<br>'.join(descriptions)
