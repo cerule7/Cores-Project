@@ -43,7 +43,7 @@ def _parse_course_codes(string):
 
 
 def courses_with_core(core):
-	for row in _query_db(f'select * from courses where "' + core + '" = "1" ORDER BY total DESC LIMIT 5'):
+	for row in _query_db(f'select * from courses where "' + core + '" = "1" ORDER BY total DESC'):
 		name = row[1]
 		number = row[0]
 		cores = set(map(Core, _parse_course_codes(row[3])))
