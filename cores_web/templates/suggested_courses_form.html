@@ -1,4 +1,17 @@
-<form class="form-horizontal" action= "/database" method="POST">
+<div>
+  <p><b> Chosen Classes: </b></p>
+  {% for course in chosen_courses %}
+    <div>
+          {{ course.description }}
+    </div>
+    {% endfor %}
+<div>
+
+{% if error %}
+  <p><strong>Error:</strong> {{ error }}
+{% endif %}
+
+<form class="form-horizontal" action= "/choices" method="POST">
 <fieldset>
 
 <!-- Form Name -->
@@ -8,7 +21,7 @@
 <div class="form-group">
     {% for course in suggested_courses %}
     <div>
-        <input id="{{ course.number }}" type="radio" name="choice"/>
+        <input id="{{ course.number }}" type="radio" name="choice" value={{ course.description }}/>
         <label for="{{ course.number }}">{{ course.description }}</label>
     </div>
     {% endfor %}
@@ -18,7 +31,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="choosebutton"></label>
   <div class="col-md-4">
-    <button id="choosebutton" name="choosebutton" class="btn btn-primary"> Choose </button>
+    <button id="choosebutton" name="choosebutton" class="btn btn-primary">Choose </button>
   </div>
 </div>
 

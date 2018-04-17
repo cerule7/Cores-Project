@@ -4,6 +4,11 @@ from flask import render_template, request
 from cores.core import Core
 from cores_web import app, database
 
+app.secret_key = "super secret key"
+global coreset
+global chosen_courses
+global suggested_courses
+
 @app.route('/', methods=['GET', 'POST'])
 def test_core_selection():
     if request.method == 'GET':
@@ -14,15 +19,18 @@ def test_core_selection():
 
 
 @app.route('/database', methods=['GET', 'POST'])
-
 def the_database():
 	#creates a set of cores from those selected
+	global coreset
+	global chosen_courses
+	global suggested_courses
 	selected_cores = (Core(core_code) for core_code in request.form.keys() if bool(request.form.get(core_code)))
 	coreset = yield_cores(selected_cores)
 	if(complete_set(coreset)):
 		return "Congrats, you've filled all of your requirements!"
 	suggested_courses = pick_core(coreset)
-	return render_template('suggested_courses_form.html', suggested_courses=suggested_courses)
+	chosen_courses = []
+	return render_template('suggested_courses_form.html', suggested_courses=suggested_courses, chosen_courses=chosen_courses)
 
 def complete_set(coreset):
 	size = len(coreset)
@@ -129,3 +137,22 @@ def get_description(course):
 #		for course in core_courses
 #	)
 #	return '<br>'.join(descriptions)
+
+@app.route('/choices', methods=['GET', 'POST'])
+def choices():
+	global coreset
+	global chosen_courses
+	global suggested_courses
+	suggested_courses = suggested_courses
+	coreset = coreset
+	chosen_courses = chosen_courses
+	course = database.search_by_number(request.form["choice"])
+	if course in chosen_courses:
+		error = 'You have already chosen that course!'
+		return render_template('suggested_courses_form.html', suggested_courses=suggested_courses, chosen_courses=chosen_courses, error=error)
+	chosen_courses.append(course)
+	print(course)
+	for core in course.cores:
+		coreset.add(core)
+	suggested_courses = pick_core(coreset)
+	return render_template('suggested_courses_form.html', suggested_courses=suggested_courses, chosen_courses=chosen_courses)

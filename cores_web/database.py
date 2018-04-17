@@ -41,6 +41,12 @@ def _parse_course_codes(string):
     """
     return _core_pattern.findall(string)
 
+def search_by_number(number):
+	for row in _query_db(f'select * from courses where number = "' + number + '" ORDER BY name'):
+		name = row[1]
+		number = row[0]
+		cores = set(map(Core, _parse_course_codes(row[3])))
+		return Course(name, number, cores)
 
 def courses_with_core(core):
 	for row in _query_db(f'select * from courses where "' + core + '" = "1" ORDER BY total DESC, number'):
